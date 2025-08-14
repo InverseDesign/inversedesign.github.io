@@ -1,0 +1,13 @@
+{{ $title := .Get "title" | default "标签页" }}
+{{ $content := .Inner }}
+
+{{ if not (.Scratch.Get "tabs") }}
+  {{ .Scratch.Set "tabs" slice }}
+{{ end }}
+
+{{ $tabs := .Scratch.Get "tabs" }}
+{{ $newTab := dict "title" $title "content" $content }}
+{{ $tabs = $tabs | append $newTab }}
+{{ .Scratch.Set "tabs" $tabs }}
+
+<!-- 这个 shortcode 不直接输出内容，而是收集标签页数据 -->

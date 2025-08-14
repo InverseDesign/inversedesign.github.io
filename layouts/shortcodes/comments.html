@@ -1,0 +1,458 @@
+{{ $postId := .Get "postId" | default .Page.RelPermalink }}
+{{ $postTitle := .Get "postTitle" | default .Page.Title }}
+
+<div class="comments-section" data-post-id="{{ $postId }}">
+  <div class="comments-header">
+    <h3>💬 评论</h3>
+    <span class="comments-count" id="comments-count-{{ $postId }}">0 条评论</span>
+  </div>
+
+  <!-- 评论表单 -->
+  <div class="comment-form-container">
+    <form class="comment-form" id="comment-form-{{ $postId }}">
+      <div class="form-group">
+        <input type="text" 
+               id="author-{{ $postId }}" 
+               name="author" 
+               placeholder="您的姓名 *" 
+               required 
+               class="form-input">
+      </div>
+      
+      <div class="form-group">
+        <input type="email" 
+               id="email-{{ $postId }}" 
+               name="email" 
+               placeholder="您的邮箱 *" 
+               required 
+               class="form-input">
+      </div>
+      
+      <div class="form-group">
+        <textarea id="content-{{ $postId }}" 
+                  name="content" 
+                  placeholder="写下您的评论... *" 
+                  required 
+                  rows="4" 
+                  class="form-textarea"></textarea>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="submit-btn">
+          <span class="btn-text">发表评论</span>
+          <span class="btn-loading" style="display: none;">发送中...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 评论列表 -->
+  <div class="comments-list" id="comments-list-{{ $postId }}">
+    <div class="loading-comments">正在加载评论...</div>
+  </div>
+</div>
+
+<style>
+.comments-section {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.comments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.comments-header h3 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.5rem;
+}
+
+.comments-count {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* 评论表单样式 */
+.comment-form-container {
+  margin-bottom: 2rem;
+}
+
+.comment-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  text-align: right;
+}
+
+.submit-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 评论列表样式 */
+.comments-list {
+  margin-top: 2rem;
+}
+
+.loading-comments {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+}
+
+.comment-item {
+  background: white;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease;
+}
+
+.comment-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.comment-date {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.comment-content {
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.comment-actions {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  gap: 1rem;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.action-btn.liked {
+  color: #ef4444;
+}
+
+/* 成功/错误消息 */
+.message {
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.message.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.message.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .comments-section {
+    padding: 1rem;
+  }
+  
+  .comments-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .comment-actions {
+    flex-wrap: wrap;
+  }
+}
+</style>
+
+<script>
+class CommentsSystem {
+  constructor(postId, postTitle) {
+    this.postId = postId;
+    this.postTitle = postTitle;
+    this.comments = [];
+    this.init();
+  }
+
+  async init() {
+    await this.loadComments();
+    this.setupEventListeners();
+    this.updateCommentsCount();
+  }
+
+  async loadComments() {
+    try {
+      const response = await fetch('/.netlify/functions/get-comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          postId: this.postId
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        this.comments = data.comments || [];
+        this.renderComments();
+      } else {
+        console.error('加载评论失败');
+      }
+    } catch (error) {
+      console.error('加载评论错误:', error);
+    }
+  }
+
+  setupEventListeners() {
+    const form = document.getElementById(`comment-form-${this.postId}`);
+    if (form) {
+      form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitBtn = form.querySelector('.submit-btn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+    
+    // 显示加载状态
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline';
+    
+    const formData = new FormData(form);
+    const commentData = {
+      postId: this.postId,
+      postTitle: this.postTitle,
+      author: formData.get('author'),
+      email: formData.get('email'),
+      content: formData.get('content'),
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      ip: 'unknown' // 服务器端会获取真实IP
+    };
+
+    try {
+      const response = await fetch('/.netlify/functions/add-comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commentData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          this.showMessage('评论发表成功！', 'success');
+          form.reset();
+          await this.loadComments(); // 重新加载评论
+        } else {
+          this.showMessage(result.message || '评论发表失败', 'error');
+        }
+      } else {
+        this.showMessage('网络错误，请稍后重试', 'error');
+      }
+    } catch (error) {
+      console.error('提交评论错误:', error);
+      this.showMessage('提交失败，请检查网络连接', 'error');
+    } finally {
+      // 恢复按钮状态
+      submitBtn.disabled = false;
+      btnText.style.display = 'inline';
+      btnLoading.style.display = 'none';
+    }
+  }
+
+  renderComments() {
+    const commentsList = document.getElementById(`comments-list-${this.postId}`);
+    if (!commentsList) return;
+
+    if (this.comments.length === 0) {
+      commentsList.innerHTML = '<div class="no-comments">暂无评论，成为第一个评论者吧！</div>';
+      return;
+    }
+
+    const commentsHtml = this.comments.map(comment => this.renderComment(comment)).join('');
+    commentsList.innerHTML = commentsHtml;
+  }
+
+  renderComment(comment) {
+    const date = new Date(comment.timestamp).toLocaleString('zh-CN');
+    return `
+      <div class="comment-item" data-comment-id="${comment.id}">
+        <div class="comment-header">
+          <span class="comment-author">${this.escapeHtml(comment.author)}</span>
+          <span class="comment-date">${date}</span>
+        </div>
+        <p class="comment-content">${this.escapeHtml(comment.content)}</p>
+        <div class="comment-actions">
+          <button class="action-btn like-btn" onclick="commentsSystem.likeComment('${comment.id}')">
+            👍 <span class="like-count">${comment.likes || 0}</span>
+          </button>
+          <button class="action-btn reply-btn" onclick="commentsSystem.replyToComment('${comment.id}')">
+            💬 回复
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  updateCommentsCount() {
+    const countElement = document.getElementById(`comments-count-${this.postId}`);
+    if (countElement) {
+      countElement.textContent = `${this.comments.length} 条评论`;
+    }
+  }
+
+  showMessage(message, type) {
+    const form = document.getElementById(`comment-form-${this.postId}`);
+    const existingMessage = form.querySelector('.message');
+    if (existingMessage) {
+      existingMessage.remove();
+    }
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = message;
+    
+    form.insertBefore(messageDiv, form.firstChild);
+    
+    setTimeout(() => {
+      messageDiv.remove();
+    }, 5000);
+  }
+
+  async likeComment(commentId) {
+    // 实现点赞功能
+    console.log('点赞评论:', commentId);
+  }
+
+  replyToComment(commentId) {
+    // 实现回复功能
+    console.log('回复评论:', commentId);
+  }
+}
+
+// 初始化评论系统
+document.addEventListener('DOMContentLoaded', function() {
+  const commentsSection = document.querySelector('.comments-section');
+  if (commentsSection) {
+    const postId = commentsSection.dataset.postId;
+    const postTitle = document.title;
+    window.commentsSystem = new CommentsSystem(postId, postTitle);
+  }
+});
+</script>

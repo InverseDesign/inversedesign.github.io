@@ -1,0 +1,103 @@
+{{ $value := .Get "value" | default "50" }}
+{{ $max := .Get "max" | default "100" }}
+{{ $label := .Get "label" | default "" }}
+{{ $color := .Get "color" | default "blue" }}
+{{ $animated := .Get "animated" | default "true" }}
+
+<div class="progress-container">
+  {{ if $label }}
+    <div class="progress-label">{{ $label }}</div>
+  {{ end }}
+  <div class="progress-bar">
+    <div class="progress-fill progress-{{ $color }} {{ if eq $animated "true" }}progress-animated{{ end }}" 
+         style="width: {{ mul (div (float $value) (float $max)) 100 }}%">
+      <span class="progress-text">{{ $value }}%</span>
+    </div>
+  </div>
+</div>
+
+<style>
+.progress-container {
+  margin: 1rem 0;
+}
+
+.progress-label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  transition: width 0.6s ease;
+}
+
+.progress-text {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 颜色主题 */
+.progress-blue {
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+.progress-green {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.progress-red {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+.progress-yellow {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.progress-purple {
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+
+/* 动画效果 */
+.progress-animated {
+  background-size: 200% 100%;
+  animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .progress-bar {
+    height: 16px;
+  }
+  
+  .progress-text {
+    font-size: 0.7rem;
+  }
+}
+</style>

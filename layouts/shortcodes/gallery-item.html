@@ -1,0 +1,11 @@
+{{ $src := .Get "src" }}
+{{ $alt := .Get "alt" | default "" }}
+{{ $caption := .Get "caption" | default "" }}
+{{ $index := .Get "index" | default "0" }}
+
+<div class="gallery-item" onclick="openGallery('{{ .Parent.Get "id" | default (printf "gallery-%d" now.Unix) }}', {{ $index }})">
+  <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy">
+  {{ if $caption }}
+    <div class="gallery-caption">{{ $caption }}</div>
+  {{ end }}
+</div>

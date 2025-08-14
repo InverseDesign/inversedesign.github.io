@@ -1,0 +1,106 @@
+{{ $id := .Get "id" | default (printf "tabs-%d" now.Unix) }}
+{{ $activeTab := .Get "active" | default "1" }}
+
+<!-- 处理内部内容 -->
+{{ .Inner }}
+
+<div class="tabs-container" data-tabs-id="{{ $id }}">
+  <div class="tabs-header">
+    {{ range $index, $tab := .Scratch.Get "tabs" }}
+      <button class="tab-button {{ if eq (add $index 1) (int $activeTab) }}active{{ end }}" 
+              onclick="switchTab('{{ $id }}', {{ add $index 1 }})">
+        {{ $tab.title }}
+      </button>
+    {{ end }}
+  </div>
+  <div class="tabs-content">
+    {{ range $index, $tab := .Scratch.Get "tabs" }}
+      <div class="tab-panel {{ if eq (add $index 1) (int $activeTab) }}active{{ end }}" 
+           data-tab="{{ add $index 1 }}">
+        {{ $tab.content | safeHTML }}
+      </div>
+    {{ end }}
+  </div>
+</div>
+
+<style>
+.tabs-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.tabs-header {
+  display: flex;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-button:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.tab-button.active {
+  background: white;
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.tabs-content {
+  background: white;
+}
+
+.tab-panel {
+  display: none;
+  padding: 1.5rem;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .tabs-header {
+    flex-direction: column;
+  }
+  
+  .tab-button {
+    border-bottom: 1px solid #e5e7eb;
+    border-right: none;
+  }
+  
+  .tab-button.active {
+    border-bottom-color: #3b82f6;
+  }
+}
+</style>
+
+<script>
+function switchTab(tabsId, tabNumber) {
+  const container = document.querySelector(`[data-tabs-id="${tabsId}"]`);
+  const buttons = container.querySelectorAll('.tab-button');
+  const panels = container.querySelectorAll('.tab-panel');
+  
+  // 移除所有活动状态
+  buttons.forEach(btn => btn.classList.remove('active'));
+  panels.forEach(panel => panel.classList.remove('active'));
+  
+  // 激活选中的标签页
+  buttons[tabNumber - 1].classList.add('active');
+  panels[tabNumber - 1].classList.add('active');
+}
+</script>

@@ -1,0 +1,78 @@
+{{ $id := .Get "id" | default (printf "collapse-%d" now.Unix) }}
+{{ $title := .Get "title" | default "点击展开" }}
+{{ $defaultOpen := .Get "open" | default false }}
+
+<div class="collapse-container">
+  <button class="collapse-trigger" onclick="toggleCollapse('{{ $id }}')" {{ if $defaultOpen }}aria-expanded="true"{{ else }}aria-expanded="false"{{ end }}>
+    <span class="collapse-icon">{{ if $defaultOpen }}▼{{ else }}▶{{ end }}</span>
+    <span class="collapse-title">{{ $title }}</span>
+  </button>
+  <div class="collapse-content" id="{{ $id }}" style="display: {{ if $defaultOpen }}block{{ else }}none{{ end }};">
+    {{ .Inner }}
+  </div>
+</div>
+
+<style>
+.collapse-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.collapse-trigger {
+  width: 100%;
+  padding: 1rem;
+  background: #f9fafb;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.collapse-trigger:hover {
+  background: #f3f4f6;
+}
+
+.collapse-icon {
+  font-size: 0.8rem;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.collapse-title {
+  font-weight: 600;
+  color: #374151;
+}
+
+.collapse-content {
+  padding: 1rem;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}
+
+.collapse-content[style*="display: block"] + .collapse-trigger .collapse-icon {
+  transform: rotate(90deg);
+}
+</style>
+
+<script>
+function toggleCollapse(id) {
+  const content = document.getElementById(id);
+  const trigger = content.previousElementSibling;
+  const icon = trigger.querySelector('.collapse-icon');
+  
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    icon.textContent = '▼';
+    trigger.setAttribute('aria-expanded', 'true');
+  } else {
+    content.style.display = 'none';
+    icon.textContent = '▶';
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+}
+</script>

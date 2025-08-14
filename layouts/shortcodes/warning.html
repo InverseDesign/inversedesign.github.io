@@ -1,0 +1,60 @@
+{{ $type := .Get "type" | default "info" }}
+{{ $title := .Get "title" | default "注意" }}
+
+<div class="warning-box warning-{{ $type }}">
+  <div class="warning-header">
+    <span class="warning-icon">
+      {{ if eq $type "danger" }}⚠️{{ else if eq $type "warning" }}⚠️{{ else if eq $type "success" }}✅{{ else }}ℹ️{{ end }}
+    </span>
+    <strong>{{ $title }}</strong>
+  </div>
+  <div class="warning-content">
+    {{ .Inner }}
+  </div>
+</div>
+
+<style>
+.warning-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.warning-info {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.warning-warning {
+  background: #fffbeb;
+  border-color: #f59e0b;
+}
+
+.warning-danger {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.warning-success {
+  background: #f0fdf4;
+  border-color: #10b981;
+}
+
+.warning-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.warning-content {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.warning-content p:last-child {
+  margin-bottom: 0;
+}
+</style>

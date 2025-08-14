@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../Users/shazhongjin/www.inversedesign.net/inversedesign/netlify/functions/hello.js"],
+  "sourceRoot": "/var/folders/js/1zc4sx3x2mx8l8ftg7d_s7g40000gn/T/tmp-23670-B5XJjF0geHix",
+  "sourcesContent": ["// \u7B80\u5355\u7684\u6D4B\u8BD5\u51FD\u6570\nexports.handler = async (event, context) => {\n  return {\n    statusCode: 200,\n    headers: {\n      'Content-Type': 'application/json',\n      'Access-Control-Allow-Origin': '*',\n      'Access-Control-Allow-Headers': 'Content-Type',\n      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'\n    },\n    body: JSON.stringify({\n      message: 'Hello from Netlify Functions!',\n      timestamp: new Date().toISOString(),\n      event: {\n        httpMethod: event.httpMethod,\n        path: event.path,\n        queryStringParameters: event.queryStringParameters\n      }\n    })\n  };\n};\n"],
+  "mappings": ";AACA,QAAQ,UAAU,OAAO,OAAO,YAAY;AAC1C,SAAO;AAAA,IACL,YAAY;AAAA,IACZ,SAAS;AAAA,MACP,gBAAgB;AAAA,MAChB,+BAA+B;AAAA,MAC/B,gCAAgC;AAAA,MAChC,gCAAgC;AAAA,IAClC;AAAA,IACA,MAAM,KAAK,UAAU;AAAA,MACnB,SAAS;AAAA,MACT,YAAW,oBAAI,KAAK,GAAE,YAAY;AAAA,MAClC,OAAO;AAAA,QACL,YAAY,MAAM;AAAA,QAClB,MAAM,MAAM;AAAA,QACZ,uBAAuB,MAAM;AAAA,MAC/B;AAAA,IACF,CAAC;AAAA,EACH;AACF;",
+  "names": []
+}

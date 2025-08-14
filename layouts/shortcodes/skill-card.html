@@ -1,0 +1,159 @@
+{{ $name := .Get "name" }}
+{{ $level := .Get "level" | default "80" }}
+{{ $icon := .Get "icon" | default "💻" }}
+{{ $color := .Get "color" | default "blue" }}
+{{ $description := .Get "description" | default "" }}
+
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-icon">{{ $icon }}</div>
+    <div class="skill-info">
+      <h3 class="skill-name">{{ $name }}</h3>
+      {{ if $description }}
+        <p class="skill-description">{{ $description }}</p>
+      {{ end }}
+    </div>
+  </div>
+  
+  <div class="skill-progress">
+    <div class="skill-bar">
+      <div class="skill-fill skill-{{ $color }}" style="width: {{ $level }}%"></div>
+    </div>
+    <span class="skill-level">{{ $level }}%</span>
+  </div>
+</div>
+
+<style>
+.skill-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.skill-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.skill-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skill-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.skill-info {
+  flex: 1;
+}
+
+.skill-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.skill-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.skill-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.skill-bar {
+  flex: 1;
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.skill-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+.skill-level {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* 颜色主题 */
+.skill-blue {
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+.skill-green {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.skill-red {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+.skill-yellow {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.skill-purple {
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+
+.skill-pink {
+  background: linear-gradient(90deg, #ec4899, #be185d);
+}
+
+.skill-indigo {
+  background: linear-gradient(90deg, #6366f1, #4338ca);
+}
+
+.skill-teal {
+  background: linear-gradient(90deg, #14b8a6, #0d9488);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .skill-card {
+    padding: 1rem;
+  }
+  
+  .skill-header {
+    gap: 0.75rem;
+  }
+  
+  .skill-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .skill-name {
+    font-size: 1rem;
+  }
+}
+</style>

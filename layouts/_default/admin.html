@@ -1,0 +1,218 @@
+{{ define "main" }}
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ .Title }} - 管理后台</title>
+    <meta name="description" content="{{ .Description }}">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: #1f2937;
+            color: white;
+            padding: 1rem;
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-header {
+            padding: 1rem 0;
+            border-bottom: 1px solid #374151;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #d1d5db;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-nav a:hover {
+            background: #374151;
+            color: white;
+        }
+        
+        .sidebar-nav a.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .content-header {
+            margin-bottom: 2rem;
+        }
+        
+        .content-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .content-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        .content-body {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .breadcrumb a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-separator {
+            color: #d1d5db;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 0.5rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .sidebar-nav {
+                display: flex;
+                overflow-x: auto;
+                gap: 0.5rem;
+            }
+            
+            .sidebar-nav li {
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+            
+            .sidebar-nav a {
+                white-space: nowrap;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>管理后台</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/admin/comments/" class="{{ if eq .RelPermalink "/admin/comments/" }}active{{ end }}">
+                            💬 评论管理
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/posts/" class="{{ if eq .RelPermalink "/admin/posts/" }}active{{ end }}">
+                            📝 文章管理
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/users/" class="{{ if eq .RelPermalink "/admin/users/" }}active{{ end }}">
+                            👥 用户管理
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/settings/" class="{{ if eq .RelPermalink "/admin/settings/" }}active{{ end }}">
+                            ⚙️ 系统设置
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/" target="_blank">
+                            🏠 返回前台
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="/admin/">管理后台</a>
+                <span class="breadcrumb-separator">/</span>
+                <span>{{ .Title }}</span>
+            </div>
+            
+            <div class="content-header">
+                <h1>{{ .Title }}</h1>
+                {{ if .Description }}
+                    <p>{{ .Description }}</p>
+                {{ end }}
+            </div>
+            
+            <div class="content-body">
+                {{ .Content }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{{ end }}
