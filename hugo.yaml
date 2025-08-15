@@ -1,32 +1,116 @@
 baseURL: https://example.org/
 languageCode: zh-cn
 title: InverseDesign
+
+# 多语言配置
+languages:
+  zh-cn:
+    languageName: "简体中文"
+    weight: 1
+    title: "InverseDesign"
+    description: "现代、快速、功能丰富的个人网站"
+    menu:
+      main:
+        - name: "博客"
+          pageRef: /blog
+          weight: 1
+        - name: "知识库"
+          pageRef: /docs
+          weight: 2
+        - name: "关于"
+          pageRef: /about
+          weight: 3
+        - name: "搜索"
+          weight: 4
+          params:
+            type: search
+        - name: "GitHub"
+          weight: 5
+          url: https://github.com/InverseDesign
+          params:
+            icon: github
+    params:
+      navbar:
+        logo:
+          alt: "InverseDesign"
+      footer:
+        copyright: '© {year} InverseDesign. 保留所有权利。'
+      social:
+        - name: "GitHub"
+          url: "https://github.com/InverseDesign"
+          icon: "github"
+        - name: "Twitter"
+          url: "https://twitter.com/InverseDesign"
+          icon: "twitter"
+        - name: "LinkedIn"
+          url: "https://linkedin.com/in/InverseDesign"
+          icon: "linkedin"
+        - name: "Email"
+          url: "mailto:your.email@example.com"
+          icon: "mail"
+  
+  en:
+    languageName: "English"
+    weight: 2
+    title: "InverseDesign"
+    description: "Modern, fast, feature-rich personal website"
+    menu:
+      main:
+        - name: "Blog"
+          pageRef: /blog
+          weight: 1
+        - name: "Knowledge Base"
+          pageRef: /docs
+          weight: 2
+        - name: "About"
+          pageRef: /about
+          weight: 3
+        - name: "Search"
+          weight: 4
+          params:
+            type: search
+        - name: "GitHub"
+          weight: 5
+          url: https://github.com/InverseDesign
+          params:
+            icon: github
+    params:
+      navbar:
+        logo:
+          alt: "InverseDesign"
+      footer:
+        copyright: '© {year} InverseDesign. All rights reserved.'
+      social:
+        - name: "GitHub"
+          url: "https://github.com/InverseDesign"
+          icon: "github"
+        - name: "Twitter"
+          url: "https://twitter.com/InverseDesign"
+          icon: "twitter"
+        - name: "LinkedIn"
+          url: "https://linkedin.com/in/InverseDesign"
+          icon: "linkedin"
+        - name: "Email"
+          url: "mailto:your.email@example.com"
+          icon: "mail"
+
+# 默认语言设置
+defaultContentLanguage: "zh-cn"
+defaultContentLanguageInSubdir: true
 ignoreLogs: ['warning-goldmark-raw-html']
+
+# Markdown 配置
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+# 开发服务器配置
+server:
+  disableLiveReload: false
 module:
   imports:
     - path: github.com/imfing/hextra
-
-# 菜单配置
-menu:
-  main:
-    - name: 博客
-      pageRef: /blog
-      weight: 1
-    - name: 知识库
-      pageRef: /docs
-      weight: 2
-    - name: 关于
-      pageRef: /about
-      weight: 3
-    - name: 搜索
-      weight: 4
-      params:
-        type: search
-    - name: GitHub
-      weight: 5
-      url: https://github.com/yourusername
-      params:
-        icon: github
 
 # Hextra主题配置
 params:
@@ -53,10 +137,10 @@ params:
     # 页脚链接
     links:
       - name: "GitHub"
-        url: "https://github.com/yourusername"
+        url: "https://github.com/InverseDesign"
         icon: "github"
       - name: "Twitter"
-        url: "https://twitter.com/yourusername"
+        url: "https://twitter.com/InverseDesign"
         icon: "twitter"
   
   # 主题配置
@@ -135,13 +219,13 @@ params:
   # 社交媒体
   social:
     - name: "GitHub"
-      url: "https://github.com/yourusername"
+      url: "https://github.com/InverseDesign"
       icon: "github"
     - name: "Twitter"
-      url: "https://twitter.com/yourusername"
+      url: "https://twitter.com/InverseDesign"
       icon: "twitter"
     - name: "LinkedIn"
-      url: "https://linkedin.com/in/yourusername"
+      url: "https://linkedin.com/in/InverseDesign"
       icon: "linkedin"
     - name: "Email"
       url: "mailto:your.email@example.com"

@@ -267,7 +267,7 @@ params:
       image: "/images/og-image.jpg"
     twitter:
       card: "summary_large_image"
-      site: "@yourusername"
+      site: "@InverseDesign"
 ```
 
 ### 7. 开发工具
@@ -351,3 +351,11 @@ Hugo 提供了丰富的功能特性，从基础的静态网站生成到高级的
 ---
 
 *更多 Hugo 功能请参考 [官方文档](https://gohugo.io/documentation/)*
+
+## 相关文档
+
+- [Hugo Layout 系统完全指南](/docs/hugo-layout-system/) - 深入了解模板系统
+- [Hugo 插件和扩展功能](/docs/hugo-plugins/) - 功能扩展和插件开发
+- [Shortcodes 使用指南](/docs/shortcodes-guide/) - 内容组件开发
+- [文章密码保护指南](/docs/password-protection-guide/) - 内容访问控制实现
+- [Hugo 后端功能实现](/docs/hugo-backend-features/) - 静态网站动态功能

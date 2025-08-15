@@ -448,6 +448,11 @@ class CommentsSystem {
 
 // 初始化评论系统
 document.addEventListener('DOMContentLoaded', function() {
+  // 检查是否已经初始化过
+  if (window.commentsSystem) {
+    return;
+  }
+  
   const commentsSection = document.querySelector('.comments-section');
   if (commentsSection) {
     const postId = commentsSection.dataset.postId;

@@ -420,3 +420,15 @@ EXPLAIN ANALYZE SELECT * FROM comments WHERE post_id = '/blog/post-1/';
 ---
 
 *更多详细信息请参考 [Supabase 官方文档](https://supabase.com/docs) 和 [PostgreSQL 官方文档](https://www.postgresql.org/docs/)*
+
+## 相关文档
+
+- [Supabase 设置指南](/docs/supabase-setup-guide/) - 环境配置和部署
+- [Supabase 在 Hugo 中的应用](/docs/supabase-hugo-applications/) - 静态网站动态功能
+- [评论系统完整指南](/docs/comments-guide/) - 完整项目实现
+- [Hugo 后端功能实现](/docs/hugo-backend-features/) - 静态网站动态功能
+
+## 实践项目
+
+- [评论系统演示](/blog/comments-demo/) - 完整功能演示
+- [Hugo + Supabase 评论系统](/docs/projects/comment-system/) - 项目文档

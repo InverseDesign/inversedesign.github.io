@@ -1,0 +1,1171 @@
+{{ $id := .Get "id" | default "relationship-graph" }}
+{{ $width := .Get "width" | default "100%" }}
+{{ $height := .Get "height" | default "600px" }}
+{{ $showThemeToggle := .Get "showThemeToggle" | default "auto" }}
+{{ $autoTheme := .Get "autoTheme" | default "true" }}
+
+<div class="relationship-graph-container" id="{{ $id }}" style="width: {{ $width }}; height: {{ $height }};" 
+     data-show-theme-toggle="{{ $showThemeToggle }}" 
+     data-auto-theme="{{ $autoTheme }}">
+  <!-- 顶部工具栏 -->
+  <div class="graph-toolbar">
+    <div class="toolbar-left">
+      <button class="toolbar-btn" onclick="resetRelationshipGraph('{{ $id }}')" title="重置视图">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+          <path d="M21 3v5h-5"></path>
+          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+          <path d="M3 21v-5h5"></path>
+        </svg>
+      </button>
+      <button class="toolbar-btn" onclick="toggleRelationshipPhysics('{{ $id }}')" title="切换物理引擎">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M12 1v6m0 6v6"></path>
+          <path d="M1 12h6m6 0h6"></path>
+        </svg>
+      </button>
+      <button class="toolbar-btn" onclick="exportRelationshipGraph('{{ $id }}')" title="导出图片">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7,10 12,15 17,10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="toolbar-center">
+      <input type="text" class="graph-search" placeholder="搜索节点..." onkeyup="searchRelationshipNodes('{{ $id }}', this.value)">
+    </div>
+    
+    <div class="toolbar-right">
+      {{ if or (eq $showThemeToggle "true") (eq $showThemeToggle "auto") }}
+      <button class="toolbar-btn theme-toggle-btn" onclick="toggleRelationshipTheme('{{ $id }}')" title="切换主题">
+        <svg class="theme-icon light" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon dark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      {{ end }}
+      <button class="toolbar-btn" onclick="playRelationshipAnimation('{{ $id }}')" title="播放动画">
+        <svg class="play-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5,3 19,12 5,21"></polygon>
+        </svg>
+        <svg class="pause-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="6" y="4" width="4" height="16"></rect>
+          <rect x="14" y="4" width="4" height="16"></rect>
+        </svg>
+      </button>
+      <button class="toolbar-btn" onclick="toggleRelationshipSettings('{{ $id }}')" title="设置">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 设置面板 -->
+  <div class="settings-panel" id="{{ $id }}-settings">
+    <div class="settings-header">
+      <h3>图谱设置</h3>
+      <button class="close-btn" onclick="toggleRelationshipSettings('{{ $id }}')">×</button>
+    </div>
+    <div class="settings-content">
+      <div class="setting-group">
+        <h4>外观</h4>
+        <div class="setting-item">
+          <label for="node-size-{{ $id }}">节点大小</label>
+          <input type="range" id="node-size-{{ $id }}" min="8" max="32" value="16" onchange="updateNodeSize('{{ $id }}', this.value)" title="调整节点大小">
+          <span class="value-display">16</span>
+        </div>
+        <div class="setting-item">
+          <label for="edge-width-{{ $id }}">连线粗细</label>
+          <input type="range" id="edge-width-{{ $id }}" min="1" max="8" value="2" onchange="updateEdgeWidth('{{ $id }}', this.value)" title="调整连线粗细">
+          <span class="value-display">2</span>
+        </div>
+        <div class="setting-item">
+          <label for="text-opacity-{{ $id }}">文本透明度</label>
+          <input type="range" id="text-opacity-{{ $id }}" min="0" max="100" value="100" onchange="updateTextOpacity('{{ $id }}', this.value)" title="调整文本透明度">
+          <span class="value-display">100%</span>
+        </div>
+        <div class="setting-item">
+          <label>
+            <input type="checkbox" checked onchange="toggleArrows('{{ $id }}', this.checked)" title="显示/隐藏箭头">
+            显示箭头
+          </label>
+        </div>
+      </div>
+      
+      <div class="setting-group">
+        <h4>布局</h4>
+        <div class="setting-item">
+          <label for="centripetal-force-{{ $id }}">向心力</label>
+          <input type="range" id="centripetal-force-{{ $id }}" min="0" max="100" value="50" onchange="updateCentripetalForce('{{ $id }}', this.value)" title="调整向心力">
+          <span class="value-display">50</span>
+        </div>
+        <div class="setting-item">
+          <label for="repulsion-force-{{ $id }}">节点排斥力</label>
+          <input type="range" id="repulsion-force-{{ $id }}" min="0" max="100" value="50" onchange="updateRepulsionForce('{{ $id }}', this.value)" title="调整节点排斥力">
+          <span class="value-display">50</span>
+        </div>
+        <div class="setting-item">
+          <label for="attraction-force-{{ $id }}">连线吸引力</label>
+          <input type="range" id="attraction-force-{{ $id }}" min="0" max="100" value="70" onchange="updateAttractionForce('{{ $id }}', this.value)" title="调整连线吸引力">
+          <span class="value-display">70</span>
+        </div>
+        <div class="setting-item">
+          <label for="link-length-{{ $id }}">连线长度</label>
+          <input type="range" id="link-length-{{ $id }}" min="50" max="300" value="200" onchange="updateLinkLength('{{ $id }}', this.value)" title="调整连线长度">
+          <span class="value-display">200</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图谱画布 -->
+  <div class="graph-canvas" id="{{ $id }}-canvas"></div>
+</div>
+
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script>
+// 检查类是否已经定义
+if (typeof window.RelationshipGraph === 'undefined') {
+  window.RelationshipGraph = class {
+    constructor(containerId) {
+      this.containerId = containerId;
+      this.canvas = document.getElementById(containerId + '-canvas');
+      this.network = null;
+      this.nodes = new vis.DataSet([]);
+      this.edges = new vis.DataSet([]);
+      this.isDarkTheme = false;
+      this.isAnimating = false;
+      this.animationInterval = null;
+      this.autoTheme = true;
+      this.showThemeToggle = 'auto';
+      this.physicsEnabled = true;
+      this.settings = {
+        nodeSize: 16,
+        edgeWidth: 2,
+        textOpacity: 1,
+        showArrows: true,
+        centripetalForce: 50,
+        repulsionForce: 50,
+        attractionForce: 70,
+        linkLength: 200
+      };
+      
+      this.init();
+    }
+
+    init() {
+      try {
+        this.loadConfig();
+        this.setupTheme();
+        this.setupNetwork();
+        this.loadData();
+        this.setupEventListeners();
+        this.setupThemeObserver();
+        
+        // 延迟执行主题检测，确保 DOM 完全加载
+        setTimeout(() => {
+          if (this.autoTheme) {
+            this.detectWebsiteTheme();
+          }
+        }, 100);
+        
+        console.log(`[${this.containerId}] 初始化完成`);
+      } catch (error) {
+        console.error(`[${this.containerId}] 初始化错误:`, error);
+      }
+    }
+
+    loadConfig() {
+      const container = document.getElementById(this.containerId);
+      this.showThemeToggle = container.dataset.showThemeToggle || 'auto';
+      this.autoTheme = container.dataset.autoTheme === 'true';
+      
+      // 如果自动主题，隐藏主题切换按钮
+      if (this.autoTheme && this.showThemeToggle === 'auto') {
+        const themeBtn = container.querySelector('.theme-toggle-btn');
+        if (themeBtn) {
+          themeBtn.style.display = 'none';
+        }
+      }
+    }
+
+    setupTheme() {
+      const container = document.getElementById(this.containerId);
+      
+      if (this.autoTheme) {
+        // 自动跟随网站主题
+        this.detectWebsiteTheme();
+      } else {
+        // 手动主题模式
+        container.classList.add('theme-light');
+      }
+    }
+
+    detectWebsiteTheme() {
+      // 检测网站主题
+      const html = document.documentElement;
+      const body = document.body;
+      
+      // 检查常见的主题类名
+      const darkClasses = ['dark', 'theme-dark', 'dark-mode', 'dark-theme'];
+      const lightClasses = ['light', 'theme-light', 'light-mode', 'light-theme'];
+      
+      let isDark = false;
+      let detectionMethod = '';
+      
+      // 检查 HTML 和 body 的类名
+      for (const className of darkClasses) {
+        if (html.classList.contains(className) || body.classList.contains(className)) {
+          isDark = true;
+          detectionMethod = `类名检测: ${className}`;
+          break;
+        }
+      }
+      
+      // 检查 CSS 变量
+      if (!isDark) {
+        const computedStyle = getComputedStyle(html);
+        const bgColor = computedStyle.getPropertyValue('--bg-color') || 
+                       computedStyle.getPropertyValue('--background-color') ||
+                       computedStyle.backgroundColor;
+        
+        if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
+          // 简单的颜色检测
+          const rgb = bgColor.match(/\d+/g);
+          if (rgb && rgb.length >= 3) {
+            const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+            isDark = brightness < 128;
+            detectionMethod = `颜色检测: ${bgColor} (亮度: ${brightness.toFixed(1)})`;
+          }
+        }
+      }
+      
+      // 检查 prefers-color-scheme
+      if (!isDark && !detectionMethod) {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          isDark = true;
+          detectionMethod = '系统偏好检测: dark';
+        } else {
+          detectionMethod = '系统偏好检测: light';
+        }
+      }
+      
+      console.log(`[${this.containerId}] 主题检测:`, {
+        isDark,
+        detectionMethod,
+        htmlClasses: html.className,
+        bodyClasses: body.className,
+        autoTheme: this.autoTheme
+      });
+      
+      this.isDarkTheme = isDark;
+      this.applyTheme();
+    }
+
+    setupThemeObserver() {
+      if (!this.autoTheme) return;
+      
+      // 监听主题变化
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            this.detectWebsiteTheme();
+          }
+        });
+      });
+      
+      // 监听 HTML 和 body 的类名变化
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+      
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    }
+
+    applyTheme() {
+      const container = document.getElementById(this.containerId);
+      container.classList.toggle('theme-dark', this.isDarkTheme);
+      container.classList.toggle('theme-light', !this.isDarkTheme);
+      
+      if (this.network) {
+        const options = this.getNetworkOptions();
+        this.network.setOptions(options);
+      }
+    }
+
+    setupNetwork() {
+      const options = this.getNetworkOptions();
+      this.network = new vis.Network(this.canvas, {
+        nodes: this.nodes,
+        edges: this.edges
+      }, options);
+
+      // 简化的鼠标交互
+      this.network.on('click', (params) => {
+        if (params.nodes.length > 0) {
+          const nodeId = params.nodes[0];
+          const node = this.nodes.get(nodeId);
+          if (node.url) {
+            window.open(node.url, '_blank');
+          }
+        }
+      });
+
+      // 监听缩放事件，强制保持连线粗细固定
+      this.network.on('zoom', () => {
+        this.network.setOptions({
+          edges: {
+            scaling: {
+              min: this.settings.edgeWidth,
+              max: this.settings.edgeWidth
+            }
+          }
+        });
+      });
+
+
+
+      // 滚轮事件 - 缩放画布
+      this.canvas.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        const delta = event.deltaY > 0 ? 0.9 : 1.1;
+        this.network.moveTo({
+          scale: this.network.getScale() * delta
+        });
+      }, { passive: false });
+
+      // 监听缩放事件，强制保持连线粗细
+      this.network.on('zoom', () => {
+        // 直接重新设置连线粗细，不检查当前选项
+        this.network.setOptions({
+          edges: {
+            scaling: {
+              min: this.settings.edgeWidth,
+              max: this.settings.edgeWidth
+            }
+          }
+        });
+      });
+    }
+
+    getNetworkOptions() {
+      const colors = this.getThemeColors();
+      
+      return {
+        nodes: {
+          shape: 'dot',
+          size: this.settings.nodeSize,
+          scaling: {
+            min: 10,    // 节点最小缩放值
+            max: 20,   // 节点最大缩放值
+            label: {
+              enabled: true,
+              min: 8,
+              max: 30
+            }
+          },
+          font: { 
+            size: 12, 
+            face: 'Arial',
+            color: colors.text,
+            strokeWidth: 0
+          },
+          borderWidth: 0,
+          shadow: {
+            enabled: true,
+            color: 'rgba(0,0,0,0.1)',
+            size: 4,
+            x: 2,
+            y: 2
+          },
+          color: {
+            background: colors.article,
+            border: 'transparent',
+            highlight: {
+              background: colors.highlight,
+              border: 'transparent'
+            }
+          }
+        },
+        edges: {
+          width: this.settings.edgeWidth,
+          scaling: {
+            min: this.settings.edgeWidth,
+            max: this.settings.edgeWidth,
+            label: {
+              enabled: false
+            }
+          },
+          color: {
+            color: colors.edge,
+            highlight: colors.edgeHighlight,
+            hover: colors.edgeHover
+          },
+          smooth: {
+            type: 'continuous',
+            roundness: 0
+          },
+          shadow: {
+            enabled: true,
+            color: 'rgba(0,0,0,0.1)',
+            size: 2,
+            x: 1,
+            y: 1
+          },
+          arrows: this.settings.showArrows ? {
+            to: {
+              enabled: true,
+              scaleFactor: 0.8
+            }
+          } : false
+        },
+        physics: {
+          enabled: true,
+          stabilization: false,
+          barnesHut: {
+            gravitationalConstant: -120000 * (this.settings.repulsionForce / 50),
+            springConstant: 0.002 * (this.settings.attractionForce / 50),
+            springLength: Math.max(50, this.settings.linkLength * 0.7),
+            centralGravity: 0.15 * (this.settings.centripetalForce / 50),
+            damping: 0.3
+          }
+        },
+        interaction: {
+          navigationButtons: false,
+          keyboard: true,
+          hover: true,
+          tooltipDelay: 200,
+          dragNodes: false,
+          dragView: true,
+          zoomView: true,
+          multiselect: false,
+          selectable: true,
+          selectConnectedEdges: false
+        },
+        layout: {
+          improvedLayout: true
+        }
+      };
+    }
+
+    getThemeColors() {
+      if (this.isDarkTheme) {
+        return {
+          background: '#1a1a1a',
+          text: '#ffffff',
+          // 不同类型节点的颜色
+          article: '#4CAF50',      // 文章 - 绿色
+          tag: '#2196F3',          // 标签 - 蓝色
+          category: '#FF9800',     // 分类 - 橙色
+          author: '#9C27B0',       // 作者 - 紫色
+          border: '#4a4a4a',
+          edge: '#666666',
+          edgeHighlight: '#888888',
+          edgeHover: '#aaaaaa',
+          highlight: '#3a3a3a'
+        };
+      } else {
+        return {
+          background: '#ffffff',
+          text: '#333333',
+          // 不同类型节点的颜色
+          article: '#4CAF50',      // 文章 - 绿色
+          tag: '#2196F3',          // 标签 - 蓝色
+          category: '#FF9800',     // 分类 - 橙色
+          author: '#9C27B0',       // 作者 - 紫色
+          border: '#dee2e6',
+          edge: '#6c757d',
+          edgeHighlight: '#495057',
+          edgeHover: '#343a40',
+          highlight: '#e9ecef'
+        };
+      }
+    }
+
+    loadData() {
+      const pages = [
+        {{ range .Site.RegularPages }}
+          {
+            id: '{{ .RelPermalink }}',
+            label: '{{ .Title }}',
+            url: '{{ .RelPermalink }}',
+            group: 'article',
+            tags: {{ .Params.tags | jsonify }},
+            categories: {{ .Params.categories | jsonify }},
+            author: '{{ .Params.author | default "未知" }}'
+          },
+        {{ end }}
+      ];
+
+      const nodes = [];
+      const edges = [];
+      const nodeMap = new Map();
+
+      pages.forEach(page => {
+        if (!nodeMap.has(page.id)) {
+          nodes.push({
+            id: page.id,
+            label: page.label,
+            url: page.url,
+            group: 'article',
+            color: {
+              background: this.getThemeColors().article,
+              border: 'transparent'
+            }
+          });
+          nodeMap.set(page.id, true);
+        }
+
+        if (page.tags && Array.isArray(page.tags)) {
+          page.tags.forEach(tag => {
+            const tagId = `tag-${tag}`;
+            if (!nodeMap.has(tagId)) {
+              nodes.push({
+                id: tagId,
+                label: tag,
+                group: 'tag',
+                color: {
+                  background: this.getThemeColors().tag,
+                  border: 'transparent'
+                }
+              });
+              nodeMap.set(tagId, true);
+            }
+            edges.push({
+              from: page.id,
+              to: tagId,
+              label: '标签'
+            });
+          });
+        }
+
+        if (page.categories && Array.isArray(page.categories)) {
+          page.categories.forEach(category => {
+            const categoryId = `category-${category}`;
+            if (!nodeMap.has(categoryId)) {
+              nodes.push({
+                id: categoryId,
+                label: category,
+                group: 'category',
+                color: {
+                  background: this.getThemeColors().category,
+                  border: 'transparent'
+                }
+              });
+              nodeMap.set(categoryId, true);
+            }
+            edges.push({
+              from: page.id,
+              to: categoryId,
+              label: '分类'
+            });
+          });
+        }
+
+        if (page.author && page.author !== '未知') {
+          const authorId = `author-${page.author}`;
+          if (!nodeMap.has(authorId)) {
+            nodes.push({
+              id: authorId,
+              label: page.author,
+              group: 'author',
+              color: {
+                background: this.getThemeColors().author,
+                border: 'transparent'
+              }
+            });
+            nodeMap.set(authorId, true);
+          }
+          edges.push({
+            from: page.id,
+            to: authorId,
+            label: '作者'
+          });
+        }
+      });
+
+      this.nodes.add(nodes);
+      this.edges.add(edges);
+      this.network.fit();
+    }
+
+    setupEventListeners() {
+      // 更新滑块值显示
+      const sliders = document.querySelectorAll(`#${this.containerId} input[type="range"]`);
+      sliders.forEach(slider => {
+        slider.addEventListener('input', (e) => {
+          const valueDisplay = e.target.nextElementSibling;
+          if (valueDisplay) {
+            valueDisplay.textContent = e.target.value + (e.target.name === 'textOpacity' ? '%' : '');
+          }
+        });
+      });
+    }
+
+    toggleTheme() {
+      if (this.autoTheme) {
+        // 如果自动主题，切换到手动模式
+        this.autoTheme = false;
+        const container = document.getElementById(this.containerId);
+        const themeBtn = container.querySelector('.theme-toggle-btn');
+        if (themeBtn) {
+          themeBtn.style.display = 'flex';
+        }
+      }
+      
+      this.isDarkTheme = !this.isDarkTheme;
+      this.applyTheme();
+    }
+
+    playAnimation() {
+      if (this.isAnimating) {
+        this.stopAnimation();
+        return;
+      }
+
+      this.isAnimating = true;
+      const container = document.getElementById(this.containerId);
+      container.classList.add('animating');
+      
+      const nodes = this.nodes.get();
+      const edges = this.edges.get();
+      
+      // 清空现有数据
+      this.nodes.clear();
+      this.edges.clear();
+      
+      // 逐步添加节点和边
+      let nodeIndex = 0;
+      let edgeIndex = 0;
+      
+      this.animationInterval = setInterval(() => {
+        if (nodeIndex < nodes.length) {
+          this.nodes.add(nodes[nodeIndex]);
+          nodeIndex++;
+        } else if (edgeIndex < edges.length) {
+          this.edges.add(edges[edgeIndex]);
+          edgeIndex++;
+        } else {
+          this.stopAnimation();
+        }
+      }, 100);
+    }
+
+    stopAnimation() {
+      this.isAnimating = false;
+      const container = document.getElementById(this.containerId);
+      container.classList.remove('animating');
+      
+      if (this.animationInterval) {
+        clearInterval(this.animationInterval);
+        this.animationInterval = null;
+      }
+    }
+
+    updateSettings(newSettings) {
+      Object.assign(this.settings, newSettings);
+      const options = this.getNetworkOptions();
+      this.network.setOptions(options);
+      
+      // 强制保持连线粗细固定
+      setTimeout(() => {
+        this.network.setOptions({
+          edges: {
+            scaling: {
+              min: this.settings.edgeWidth,
+              max: this.settings.edgeWidth
+            }
+          }
+        });
+      }, 10);
+    }
+
+    reset() {
+      this.network.fit();
+    }
+
+    togglePhysics() {
+      // 使用一个简单的标志来跟踪物理引擎状态
+      if (!this.physicsEnabled) {
+        this.physicsEnabled = true;
+      }
+      this.physicsEnabled = !this.physicsEnabled;
+      this.network.setOptions({
+        physics: { enabled: this.physicsEnabled }
+      });
+    }
+
+    exportImage() {
+      const canvas = this.network.canvas.frame.canvas;
+      const link = document.createElement('a');
+      link.download = 'relationship-graph.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    searchNodes(query) {
+      if (!query.trim()) {
+        this.network.selectNodes([]);
+        return;
+      }
+      
+      const nodes = this.nodes.get();
+      const matchingNodes = nodes.filter(node => 
+        node.label.toLowerCase().includes(query.toLowerCase())
+      );
+      const nodeIds = matchingNodes.map(node => node.id);
+      
+      this.network.selectNodes(nodeIds);
+      if (nodeIds.length > 0) {
+        this.network.focus(nodeIds[0]);
+      }
+    }
+  };
+}
+
+// 全局实例管理
+window.relationshipGraphInstances = window.relationshipGraphInstances || {};
+
+// 控制函数
+function initRelationshipGraph(containerId) {
+  if (!window.relationshipGraphInstances[containerId]) {
+    window.relationshipGraphInstances[containerId] = new window.RelationshipGraph(containerId);
+  }
+  return window.relationshipGraphInstances[containerId];
+}
+
+function resetRelationshipGraph(containerId) {
+  const graph = window.relationshipGraphInstances[containerId];
+  if (graph) graph.reset();
+}
+
+function toggleRelationshipPhysics(containerId) {
+  const graph = window.relationshipGraphInstances[containerId];
+  if (graph) graph.togglePhysics();
+}
+
+function exportRelationshipGraph(containerId) {
+  const graph = window.relationshipGraphInstances[containerId];
+  if (graph) graph.exportImage();
+}
+
+function searchRelationshipNodes(containerId, query) {
+  const graph = window.relationshipGraphInstances[containerId];
+  if (graph) graph.searchNodes(query);
+}
+
+function toggleRelationshipTheme(containerId) {
+  const graph = window.relationshipGraphInstances[containerId];
+  if (graph) graph.toggleTheme();
+}
+
+function playRelationshipAnimation(containerId) {
+  const graph = window.relationshipGraphInstances[containerId];
+  if (graph) graph.playAnimation();
+}
+
+function toggleRelationshipSettings(containerId) {
+  const settingsPanel = document.getElementById(containerId + '-settings');
+  settingsPanel.classList.toggle('show');
+}
+
+// 设置更新函数
+function updateNodeSize(containerId, value) {
+  const graph = window.enhancedGraphInstances[containerId];
+  if (graph) graph.updateSettings({ nodeSize: parseInt(value) });
+}
+
+function updateEdgeWidth(containerId, value) {
+  const graph = window.enhancedGraphInstances[containerId];
+  if (graph) graph.updateSettings({ edgeWidth: parseInt(value) });
+}
+
+function updateTextOpacity(containerId, value) {
+  const graph = window.enhancedGraphInstances[containerId];
+  if (graph) graph.updateSettings({ textOpacity: parseInt(value) / 100 });
+}
+
+function toggleArrows(containerId, checked) {
+  const graph = window.enhancedGraphInstances[containerId];
+  if (graph) graph.updateSettings({ showArrows: checked });
+}
+
+function updateCentripetalForce(containerId, value) {
+  const graph = window.enhancedGraphInstances[containerId];
+  if (graph) graph.updateSettings({ centripetalForce: parseInt(value) });
+}
+
+function updateRepulsionForce(containerId, value) {
+  const graph = window.enhancedGraphInstances[containerId];
+  if (graph) graph.updateSettings({ repulsionForce: parseInt(value) });
+}
+
+function updateAttractionForce(containerId, value) {
+  const graph = window.enhancedGraphInstances[containerId];
+  if (graph) graph.updateSettings({ attractionForce: parseInt(value) });
+}
+
+function updateLinkLength(containerId, value) {
+  const graph = window.enhancedGraphInstances[containerId];
+  if (graph) graph.updateSettings({ linkLength: parseInt(value) });
+}
+
+// 自动初始化
+document.addEventListener('DOMContentLoaded', function() {
+  const graphContainers = document.querySelectorAll('.relationship-graph-container');
+  graphContainers.forEach(container => {
+    initRelationshipGraph(container.id);
+  });
+});
+</script>
+
+<style>
+.relationship-graph-container {
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin: 1rem 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.relationship-graph-container.theme-dark {
+  background: #1a1a1a;
+  border-color: #333333;
+  color: #ffffff;
+}
+
+/* 工具栏样式 */
+.graph-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  gap: 12px;
+}
+
+.theme-dark .graph-toolbar {
+  background: #2d2d2d;
+  border-bottom-color: #333333;
+}
+
+.toolbar-left, .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-center {
+  flex: 1;
+  max-width: 300px;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6c757d;
+}
+
+.toolbar-btn:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+  color: #495057;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.theme-dark .toolbar-btn {
+  background: #3a3a3a;
+  border-color: #4a4a4a;
+  color: #cccccc;
+}
+
+.theme-dark .toolbar-btn:hover {
+  background: #4a4a4a;
+  border-color: #5a5a5a;
+  color: #ffffff;
+}
+
+.graph-search {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #ffffff;
+  color: #333333;
+  transition: all 0.2s ease;
+}
+
+.graph-search:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+.theme-dark .graph-search {
+  background: #3a3a3a;
+  border-color: #4a4a4a;
+  color: #ffffff;
+}
+
+.theme-dark .graph-search:focus {
+  border-color: #007bff;
+}
+
+/* 主题图标 */
+.theme-icon.dark {
+  display: none;
+}
+
+.theme-dark .theme-icon.light {
+  display: none;
+}
+
+.theme-dark .theme-icon.dark {
+  display: block;
+}
+
+/* 播放动画图标 */
+.pause-icon {
+  display: none;
+}
+
+.relationship-graph-container.animating .play-icon {
+  display: none;
+}
+
+.relationship-graph-container.animating .pause-icon {
+  display: block;
+}
+
+/* 设置面板 */
+.settings-panel {
+  position: absolute;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100%;
+  background: #ffffff;
+  border-left: 1px solid #e1e5e9;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.settings-panel.show {
+  right: 0;
+}
+
+.theme-dark .settings-panel {
+  background: #2d2d2d;
+  border-left-color: #333333;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+}
+
+.theme-dark .settings-header {
+  background: #3a3a3a;
+  border-bottom-color: #333333;
+}
+
+.settings-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.theme-dark .settings-header h3 {
+  color: #ffffff;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #495057;
+}
+
+.theme-dark .close-btn {
+  color: #cccccc;
+}
+
+.theme-dark .close-btn:hover {
+  color: #ffffff;
+}
+
+.settings-content {
+  padding: 16px;
+}
+
+.setting-group {
+  margin-bottom: 24px;
+}
+
+.setting-group h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.theme-dark .setting-group h4 {
+  color: #ffffff;
+}
+
+.setting-item {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.setting-item label {
+  flex: 1;
+  font-size: 14px;
+  color: #666666;
+  cursor: pointer;
+}
+
+.theme-dark .setting-item label {
+  color: #cccccc;
+}
+
+.setting-item input[type="range"] {
+  flex: 2;
+  height: 4px;
+  background: #e1e5e9;
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.setting-item input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.value-display {
+  min-width: 40px;
+  text-align: right;
+  font-size: 12px;
+  color: #666666;
+  font-family: monospace;
+}
+
+.theme-dark .value-display {
+  color: #cccccc;
+}
+
+.setting-item input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* 图谱画布 */
+.graph-canvas {
+  width: 100%;
+  height: calc(100% - 60px);
+  min-height: 400px;
+  background: #ffffff;
+}
+
+.theme-dark .graph-canvas {
+  background: #1a1a1a;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .graph-toolbar {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .toolbar-left, .toolbar-right {
+    justify-content: center;
+  }
+  
+  .toolbar-center {
+    max-width: none;
+  }
+  
+  .settings-panel {
+    width: 100%;
+    right: -100%;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.relationship-graph-container {
+  animation: fadeIn 0.3s ease;
+}
+</style>

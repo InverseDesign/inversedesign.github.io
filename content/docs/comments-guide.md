@@ -535,4 +535,22 @@ console.log('请求头:', event.headers);
 
 ---
 
+## 相关文档
+
+- [Supabase 介绍和入门](/docs/supabase-introduction/) - 数据库服务入门
+- [Netlify Functions 开发指南](/docs/netlify-functions-guide/) - 无服务器函数开发
+- [Hugo 后端功能实现](/docs/hugo-backend-features/) - 静态网站动态功能
+- [Hugo + Supabase 评论系统](/docs/projects/comment-system/) - 项目文档
+
+## 实践演示
+
+- [评论系统演示](/blog/comments-demo/) - 完整功能演示
+- [评论系统调试页面](/blog/debug-comments/) - 问题诊断和测试
+
+## 技术栈
+
+- [Hugo 特色功能详解](/docs/hugo-features/) - 静态网站生成器
+- [Shortcodes 使用指南](/docs/shortcodes-guide/) - 内容组件开发
+- [文章密码保护指南](/docs/password-protection-guide/) - 安全功能实现
+
 *更多信息请参考演示页面：`/blog/comments-demo/`*

@@ -195,4 +195,22 @@ hugo mod graph
 
 ---
 
+## 相关文档
+
+- [Hugo 特色功能详解](/docs/hugo-features/) - Hugo 功能特性
+- [Hugo Layout 系统完全指南](/docs/hugo-layout-system/) - 模板系统详解
+- [Shortcodes 使用指南](/docs/shortcodes-guide/) - 内容组件开发
+- [Netlify Functions 开发指南](/docs/netlify-functions-guide/) - 无服务器函数开发
+
+## 实践演示
+
+- [评论系统演示](/blog/comments-demo/) - 完整功能演示
+- [Shortcodes 功能演示](/blog/shortcodes-demo/) - 各种短代码功能展示
+
+## 技术栈
+
+- [Supabase 介绍和入门](/docs/supabase-introduction/) - 数据库服务
+- [评论系统完整指南](/docs/comments-guide/) - 用户交互系统
+- [文章密码保护指南](/docs/password-protection-guide/) - 安全功能实现
+
 *如有其他问题，请参考官方文档或社区资源。*

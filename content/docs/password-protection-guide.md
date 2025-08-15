@@ -294,4 +294,21 @@ categories:
 
 ---
 
+## 相关文档
+
+- [Hugo 特色功能详解](/docs/hugo-features/) - Hugo 功能特性
+- [Netlify Functions 开发指南](/docs/netlify-functions-guide/) - 无服务器函数开发
+- [Hugo 后端功能实现](/docs/hugo-backend-features/) - 静态网站动态功能
+- [Shortcodes 使用指南](/docs/shortcodes-guide/) - 内容组件开发
+
+## 实践演示
+
+- [密码保护演示](/blog/password-protection-demo/) - 完整功能演示
+- [服务器端密码验证演示](/blog/server-side-security-demo/) - 高级安全功能
+
+## 技术栈
+
+- [Supabase 介绍和入门](/docs/supabase-introduction/) - 数据库服务
+- [评论系统完整指南](/docs/comments-guide/) - 用户交互系统
+
 *更多技术细节请参考 Hugo 官方文档和模板开发指南。*

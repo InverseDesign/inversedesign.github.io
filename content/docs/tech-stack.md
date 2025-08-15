@@ -22,9 +22,9 @@ categories:
 - **Hugo** - Go 语言编写的静态网站生成器
   - 优点：构建速度快、配置简单
   - 应用：个人博客、文档网站
-  - 相关：[Hugo vs Hexo 对比](/docs/hexo-vs-hugo-comparison/)
+  - 相关：[Hugo 特色功能详解](/docs/hugo-features/)
 
-- **Hexo** - Node.js 编写的静态网站生成器
+
   - 优点：插件丰富、社区活跃
   - 应用：技术博客、个人网站
 
@@ -120,7 +120,7 @@ categories:
 ### 入门阶段
 1. **HTML/CSS/JavaScript** - 前端基础
 2. **Git 版本控制** - 代码管理
-3. **静态网站生成器** - Hugo/Hexo
+3. **静态网站生成器** - Hugo
 
 ### 进阶阶段
 1. **无服务器架构** - Netlify Functions
@@ -162,6 +162,19 @@ categories:
 
 ### 学习资源
 - [JAMstack 官网](https://jamstack.org/)
+
+## 相关文档
+
+- [Hugo 特色功能详解](/docs/hugo-features/) - Hugo 功能特性详解
+- [Netlify Functions 开发指南](/docs/netlify-functions-guide/) - 无服务器函数开发
+- [Supabase 介绍和入门](/docs/supabase-introduction/) - 数据库服务入门
+- [Hugo 特色功能详解](/docs/hugo-features/) - 技术优势分析
+- [Hugo 后端功能实现](/docs/hugo-backend-features/) - 动态功能实现
+
+## 实践项目
+
+- [评论系统完整指南](/docs/comments-guide/) - 完整项目实现
+- [文章密码保护指南](/docs/password-protection-guide/) - 安全功能实现
 - [Serverless 架构指南](https://serverless.com/)
 - [静态网站最佳实践](https://www.staticgen.com/)
 

@@ -295,7 +295,7 @@ netlify functions:invoke add-comment --body '{"test": "data"}'
 - [Hugo 官方文档](https://gohugo.io/documentation/)
 - [Supabase 文档](https://supabase.com/docs)
 - [Netlify 文档](https://docs.netlify.com/)
-- [项目 GitHub 仓库](https://github.com/yourusername/hugo-supabase-comments)
+- [项目 GitHub 仓库](https://github.com/InverseDesign/hugo-supabase-comments)
 
 ---
 

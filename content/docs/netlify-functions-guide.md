@@ -369,3 +369,17 @@ Netlify Functions 是连接静态网站和动态功能的桥梁：
 - **按需扩展**：根据访问量自动扩展
 
 通过 Netlify Functions，您的静态网站可以拥有评论系统、用户认证、动态内容等丰富的交互功能！
+
+## 相关文档
+
+- [Netlify Functions 本地开发 vs 生产部署](/docs/netlify-functions-comparison/) - 开发环境对比
+- [评论系统完整指南](/docs/comments-guide/) - 完整项目实现
+- [Hugo 后端功能实现](/docs/hugo-backend-features/) - 静态网站动态功能
+- [Supabase 在 Hugo 中的应用](/docs/supabase-hugo-applications/) - 数据库集成
+
+## 实践项目
+
+- [评论系统演示](/blog/comments-demo/) - 完整功能演示
+- [密码保护演示](/blog/password-protection-demo/) - 访问控制演示
+
+*更多详细信息请参考 [Netlify Functions 官方文档](https://docs.netlify.com/functions/overview/)*

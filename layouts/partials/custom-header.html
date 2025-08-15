@@ -1,0 +1,89 @@
+<!-- 自定义头部组件 -->
+<div class="custom-header">
+    <div class="container">
+        <div class="custom-header-content">
+            <div class="custom-header-left">
+                <h2 class="custom-title">{{ .Title }}</h2>
+                {{ if .Params.description }}
+                    <p class="custom-description">{{ .Params.description }}</p>
+                {{ end }}
+            </div>
+            <div class="custom-header-right">
+                {{ if .Params.author }}
+                    <div class="author-info">
+                        <span class="author-label">作者:</span>
+                        <span class="author-name">{{ .Params.author }}</span>
+                    </div>
+                {{ end }}
+                {{ if .Date }}
+                    <div class="date-info">
+                        <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                            {{ .Date.Format "2006年1月2日" }}
+                        </time>
+                    </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.custom-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.custom-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.custom-title {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+}
+
+.custom-description {
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+.custom-header-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.author-info, .date-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.author-label {
+    opacity: 0.8;
+}
+
+.author-name {
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .custom-header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .custom-title {
+        font-size: 1.5rem;
+    }
+}
+</style>

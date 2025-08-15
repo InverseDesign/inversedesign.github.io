@@ -11702,7 +11702,42 @@ var require_main5 = __commonJS({
 var { createClient } = require_main5();
 var supabaseUrl = process.env.SUPABASE_URL;
 var supabaseKey = process.env.SUPABASE_ANON_KEY;
-var supabase = createClient(supabaseUrl, supabaseKey);
+if (!supabaseUrl || !supabaseKey) {
+  console.warn("\u26A0\uFE0F Supabase \u73AF\u5883\u53D8\u91CF\u672A\u914D\u7F6E\uFF0C\u4F7F\u7528\u6A21\u62DF\u6570\u636E");
+}
+var supabase = null;
+if (false) {
+  try {
+    supabase = createClient(supabaseUrl, supabaseKey);
+  } catch (error) {
+    console.error("\u274C Supabase \u5BA2\u6237\u7AEF\u521B\u5EFA\u5931\u8D25:", error.message);
+  }
+}
+global.mockComments = global.mockComments || [
+  {
+    id: "1",
+    post_id: "/blog/first-post/",
+    post_title: "\u6211\u7684\u7B2C\u4E00\u7BC7\u535A\u5BA2\u6587\u7AE0",
+    author: "\u5F20\u4E09",
+    email: "zhangsan@example.com",
+    content: "\u8FD9\u662F\u4E00\u7BC7\u5F88\u68D2\u7684\u6587\u7AE0\uFF01",
+    created_at: "2023-06-23T10:00:00Z",
+    status: "approved"
+  },
+  {
+    id: "2",
+    post_id: "/blog/comments-demo/",
+    post_title: "\u8BC4\u8BBA\u7CFB\u7EDF\u6F14\u793A",
+    author: "\u674E\u56DB",
+    email: "lisi@example.com",
+    content: "\u8BC4\u8BBA\u7CFB\u7EDF\u5DE5\u4F5C\u5F97\u5F88\u597D\uFF01",
+    created_at: "2023-06-23T11:00:00Z",
+    status: "approved"
+  }
+];
+function generateId() {
+  return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+}
 exports.handler = async (event, context) => {
   if (event.httpMethod !== "POST") {
     return {
@@ -11796,31 +11831,60 @@ exports.handler = async (event, context) => {
       // 默认状态为已批准
       created_at: (/* @__PURE__ */ new Date()).toISOString()
     };
-    const { data, error } = await supabase.from("comments").insert([insertData]).select();
-    if (error) {
-      console.error("Supabase \u63D2\u5165\u9519\u8BEF:", error);
-      return {
-        statusCode: 500,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        },
-        body: JSON.stringify({
-          success: false,
-          message: "\u8BC4\u8BBA\u4FDD\u5B58\u5931\u8D25\uFF0C\u8BF7\u7A0D\u540E\u91CD\u8BD5"
-        })
+    let savedComment;
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.from("comments").insert([insertData]).select();
+        if (error) {
+          console.error("Supabase \u63D2\u5165\u9519\u8BEF:", error);
+          return {
+            statusCode: 500,
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify({
+              success: false,
+              message: "\u8BC4\u8BBA\u4FDD\u5B58\u5931\u8D25\uFF0C\u8BF7\u7A0D\u540E\u91CD\u8BD5"
+            })
+          };
+        }
+        savedComment = data[0];
+      } catch (error) {
+        console.error("Supabase \u63D2\u5165\u5F02\u5E38:", error);
+        return {
+          statusCode: 500,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          },
+          body: JSON.stringify({
+            success: false,
+            message: "\u8BC4\u8BBA\u4FDD\u5B58\u5931\u8D25\uFF0C\u8BF7\u7A0D\u540E\u91CD\u8BD5"
+          })
+        };
+      }
+    } else {
+      const newComment = {
+        id: generateId(),
+        ...insertData
       };
+      global.mockComments.push(newComment);
+      savedComment = newComment;
+      console.log("\u6A21\u62DF\u6570\u636E - \u65B0\u8BC4\u8BBA\u5DF2\u6DFB\u52A0:", newComment);
     }
-    try {
-      await supabase.from("access_logs").insert([{
-        action: "add_comment",
-        post_id,
-        ip_address: clientIP,
-        user_agent: commentData.user_agent || "unknown",
-        created_at: (/* @__PURE__ */ new Date()).toISOString()
-      }]);
-    } catch (logError) {
-      console.error("\u8BB0\u5F55\u8BBF\u95EE\u65E5\u5FD7\u5931\u8D25:", logError);
+    if (supabase) {
+      try {
+        await supabase.from("access_logs").insert([{
+          action: "add_comment",
+          post_id,
+          ip_address: clientIP,
+          user_agent: commentData.user_agent || "unknown",
+          created_at: (/* @__PURE__ */ new Date()).toISOString()
+        }]);
+      } catch (logError) {
+        console.error("\u8BB0\u5F55\u8BBF\u95EE\u65E5\u5FD7\u5931\u8D25:", logError);
+      }
     }
     return {
       statusCode: 200,
@@ -11831,7 +11895,7 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({
         success: true,
         message: "\u8BC4\u8BBA\u53D1\u8868\u6210\u529F\uFF01",
-        comment: data[0]
+        comment: savedComment
       })
     };
   } catch (error) {
