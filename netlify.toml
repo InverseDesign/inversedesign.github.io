@@ -3,7 +3,7 @@
   publish = "public"
 
 [build.environment]
-  HUGO_VERSION = "0.120.0"
+  HUGO_VERSION = "0.148.2"
   HUGO_ENV = "production"
   HUGO_ENABLEGITINFO = "true"
 
@@ -14,7 +14,7 @@
 # Netlify Functions 环境变量
 [functions.environment]
   SUPABASE_URL = "https://dsrzlugtzanbzwzagakd.supabase.co"
-  SUPABASE_ANON_KEY = "sb_publishable_vhPfTkE2AhtBbSqKo6goFQ_vK518sVh%"
+  SUPABASE_ANON_KEY = "sb_publishable_vhPfTkE2AhtBbSqKo6goFQ_vK518sVh"
 
 # 重定向和自定义头信息
 [context.production.environment]

@@ -2,6 +2,7 @@
 title: "InverseDesign"
 date: 2023-06-23
 description: "现代、快速、功能丰富的个人网站 - 使用 Markdown 和 Hugo 构建"
+layout: hextra-home
 ---
 
 # 用 Markdown 和 Hugo 构建现代网站

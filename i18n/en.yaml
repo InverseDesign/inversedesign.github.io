@@ -1,0 +1,65 @@
+# English translation file
+title: "InverseDesign"
+description: "Modern, fast, feature-rich personal website"
+
+# Menu translations - Hugo standard format
+menu.main.blog: "Blog"
+menu.main.docs: "Docs"
+menu.main.about: "About"
+menu.main.search: "Search"
+menu.main.theme: "Theme"
+menu.main.language: "Language"
+menu.footer.footertext: "Modern, fast, feature-rich personal website"
+
+# Page titles
+page.home: "Home"
+page.blog: "Blog"
+page.docs: "Documentation"
+page.about: "About"
+
+# Common text
+common.read_more: "Read More"
+common.back_to_top: "Back to Top"
+common.loading: "Loading..."
+common.no_results: "No results found"
+common.search_placeholder: "Search articles..."
+common.published_on: "Published on"
+common.updated_on: "Updated on"
+common.reading_time: "Reading time"
+common.word_count: "Words"
+
+# Footer
+footer.copyright: "© {year} InverseDesign. All rights reserved."
+footer.powered_by: "Powered by Hugo"
+footer.made_with: "Made with ❤️"
+
+# Theme switcher
+theme.light: "Light"
+theme.dark: "Dark"
+theme.system: "System"
+
+# Language switcher
+language.zh_cn: "简体中文"
+language.en: "English"
+
+# Search
+search.title: "Search"
+search.placeholder: "Search articles..."
+search.no_results: "No results found"
+search.results_count: "Found {count} results"
+
+# Comments
+comments.title: "Comments"
+comments.no_comments: "No comments yet"
+comments.add_comment: "Add a comment"
+comments.reply: "Reply"
+comments.submit: "Submit"
+comments.cancel: "Cancel"
+comments.loading: "Loading comments..."
+comments.error: "Failed to load comments"
+
+# Missing translations
+blog: "Blog"
+docs: "Docs"
+about: "About"
+copyCode: "Copy Code"

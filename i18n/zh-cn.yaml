@@ -1,0 +1,65 @@
+# 中文翻译文件
+title: "InverseDesign"
+description: "现代、快速、功能丰富的个人网站"
+
+# 菜单翻译 - Hugo标准格式
+menu.main.blog: "博客"
+menu.main.docs: "知识库"
+menu.main.about: "关于"
+menu.main.search: "搜索"
+menu.main.theme: "主题"
+menu.main.language: "语言"
+menu.footer.footertext: "现代、快速、功能丰富的个人网站"
+
+# 页面标题
+page.home: "首页"
+page.blog: "博客"
+page.docs: "知识库"
+page.about: "关于"
+
+# 通用文本
+common.read_more: "阅读更多"
+common.back_to_top: "返回顶部"
+common.loading: "加载中..."
+common.no_results: "没有找到结果"
+common.search_placeholder: "搜索文章..."
+common.published_on: "发布于"
+common.updated_on: "更新于"
+common.reading_time: "阅读时间"
+common.word_count: "字数"
+
+# 页脚
+footer.copyright: "© {year} InverseDesign. 保留所有权利。"
+footer.powered_by: "由 Hugo 强力驱动"
+footer.made_with: "用 ❤️ 制作"
+
+# 主题切换
+theme.light: "浅色"
+theme.dark: "深色"
+theme.system: "系统"
+
+# 语言切换
+language.zh_cn: "简体中文"
+language.en: "English"
+
+# 搜索
+search.title: "搜索"
+search.placeholder: "搜索文章..."
+search.no_results: "没有找到相关结果"
+search.results_count: "找到 {count} 个结果"
+
+# 评论
+comments.title: "评论"
+comments.no_comments: "暂无评论"
+comments.add_comment: "添加评论"
+comments.reply: "回复"
+comments.submit: "提交"
+comments.cancel: "取消"
+comments.loading: "加载评论中..."
+comments.error: "加载评论失败"
+
+# 缺失的翻译
+blog: "博客"
+docs: "知识库"
+about: "关于"
+copyCode: "复制代码"

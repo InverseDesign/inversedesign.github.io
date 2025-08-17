@@ -23,7 +23,7 @@
 1. 克隆仓库：
 
 ```bash
-git clone https://github.com/InverseDesign/inversedesign.git
+git clone https://github.com/yourusername/inversedesign.git
 cd inversedesign
 ```
 

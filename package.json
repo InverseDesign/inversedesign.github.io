@@ -2,21 +2,23 @@
   "name": "hugo-supabase-comments",
   "version": "1.0.0",
   "description": "Hugo 内置短代码 + Supabase 评论系统",
+  "packageManager": "pnpm@9.15.4",
   "main": "index.js",
   "scripts": {
-    "dev": "hugo server",
+    "dev": "netlify dev",
+    "hugo": "hugo server",
     "build": "hugo --gc --minify",
     "deploy": "hugo --gc --minify && netlify deploy --prod",
-    "test": "node test-supabase.js",
-    "test:connection": "node test-supabase.js",
+    "test": "node --no-deprecation test-supabase.js",
+    "test:connection": "node --no-deprecation test-supabase.js",
     "setup": "node setup-env.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.38.0",
-    "dotenv": "^16.3.1"
+    "@supabase/supabase-js": "^2.55.0",
+    "dotenv": "^16.6.1"
   },
   "devDependencies": {
-    "netlify-cli": "^17.0.0"
+    "netlify-cli": "^17.38.1"
   },
   "keywords": [
     "hugo",
