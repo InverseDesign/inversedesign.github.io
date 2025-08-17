@@ -1,8 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../../Users/shazhongjin/www.inversedesign.net/inversedesign/netlify/functions/test-debug.js"],
-  "sourceRoot": "/var/folders/js/1zc4sx3x2mx8l8ftg7d_s7g40000gn/T/tmp-36696-g5e6LI1jEkDR",
-  "sourcesContent": ["// \u6D4B\u8BD5\u8C03\u8BD5\u51FD\u6570\nexports.handler = async (event, context) => {\n  return {\n    statusCode: 200,\n    headers: {\n      'Content-Type': 'application/json',\n      'Access-Control-Allow-Origin': '*'\n    },\n    body: JSON.stringify({\n      message: '\u6D4B\u8BD5\u51FD\u6570\u6B63\u5E38\u5DE5\u4F5C',\n      timestamp: new Date().toISOString(),\n      env: {\n        SUPABASE_URL: process.env.SUPABASE_URL ? '\u5DF2\u914D\u7F6E' : '\u672A\u914D\u7F6E',\n        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '\u5DF2\u914D\u7F6E' : '\u672A\u914D\u7F6E'\n      }\n    })\n  };\n};\n"],
-  "mappings": ";AACA,QAAQ,UAAU,OAAO,OAAO,YAAY;AAC1C,SAAO;AAAA,IACL,YAAY;AAAA,IACZ,SAAS;AAAA,MACP,gBAAgB;AAAA,MAChB,+BAA+B;AAAA,IACjC;AAAA,IACA,MAAM,KAAK,UAAU;AAAA,MACnB,SAAS;AAAA,MACT,YAAW,oBAAI,KAAK,GAAE,YAAY;AAAA,MAClC,KAAK;AAAA,QACH,cAAc,QAAQ,IAAI,eAAe,uBAAQ;AAAA,QACjD,mBAAmB,QAAQ,IAAI,oBAAoB,uBAAQ;AAAA,MAC7D;AAAA,IACF,CAAC;AAAA,EACH;AACF;",
-  "names": []
-}
