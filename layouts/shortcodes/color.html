@@ -1,0 +1,12 @@
+{{/*
+  Color Text Shortcode
+  Usage: {{< color text="文字内容" color="red" background="yellow" >}}
+  or: {{< color red >}}文字内容{{< /color >}}
+*/}}
+
+{{ $text := .Get "text" | default .Inner }}
+{{ $color := .Get "color" | default "inherit" }}
+{{ $background := .Get "background" | default "transparent" }}
+{{ $class := .Get "class" | default "" }}
+
+<span style="color: {{ $color }}; background-color: {{ $background }};" class="{{ $class }}">{{ $text | markdownify }}</span>

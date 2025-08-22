@@ -5,8 +5,6 @@ description: "Technical notes, learning resources, and development guides"
 weight: 1
 ---
 
-# 📚 Knowledge Base
-
 Welcome to the knowledge base! Here you'll find comprehensive technical documentation, learning resources, and development guides.
 
 ## 🎯 What You'll Find Here
