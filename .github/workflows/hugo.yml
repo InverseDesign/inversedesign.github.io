@@ -3,7 +3,7 @@ name: Deploy Hugo site to GitHub Pages
 on:
   push:
     branches:
-      - main  # 或者您的主分支名称
+      - main
   workflow_dispatch:
 
 permissions:
@@ -24,19 +24,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4            # ✅ v4
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: 'latest'
-          extended: true
+        uses: peaceiris/actions-hugo@v3      # 这是 Hugo 安装 action，非 artifact，目前最新就是 v3，可放心使用
 
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5     # ✅ 官方最新
 
       - name: Build with Hugo
         env:
@@ -46,9 +43,7 @@ jobs:
           hugo --minify
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: ./public
+        uses: actions/upload-pages-artifact@v3  # ✅ 官方已发布 v3（注意：upload-pages-artifact 最新就是 v3，与 upload-artifact 不同）
 
   deploy:
     environment:
@@ -59,4 +54,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4        # ✅ 官方最新
