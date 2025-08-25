@@ -1,0 +1,90 @@
+{{- $id := printf "mtable-%s" (delimit (shuffle (seq 1 10)) "" ) -}}
+<div id="{{ $id }}" class="mtable">
+  {{- /* 直接把内层内容按 Markdown 渲染成 <table> */ -}}
+  {{- .Inner | markdownify -}}
+</div>
+
+<script>
+(function(){
+  const root = document.getElementById("{{ $id }}");
+  if (!root) return;
+
+  const tables = root.querySelectorAll("table");
+  if (!tables.length) return;
+
+  tables.forEach((table) => {
+    // 预处理：给所有单元格打上原始列索引(data-col)和原始token(data-token)
+    const allRows = Array.from(table.querySelectorAll("tr"));
+    allRows.forEach((tr) => {
+      let col = 0;
+      const cells = Array.from(tr.querySelectorAll("th,td"));
+      cells.forEach((cell) => {
+        const tok = (cell.textContent || "").trim();
+        cell.dataset.col = String(col);
+        cell.dataset.token = tok;
+        col += 1; // 初始都视为宽度1
+      });
+    });
+
+    // 一、先做向左合并（处理 "<"）
+    allRows.forEach((tr) => {
+      const cells = Array.from(tr.querySelectorAll("th,td"));
+      for (let i = 0; i < cells.length; i++) {
+        const td = cells[i];
+        const tok = td.dataset.token;
+        if (tok === "<") {
+          // 找左侧最近的“可见且不是标记”的锚点
+          let k = i - 1, anchor = null;
+          while (k >= 0) {
+            const cand = cells[k];
+            if (cand.dataset.hidden !== "1" && cand.dataset.token !== "<" && cand.dataset.token !== "^") {
+              anchor = cand;
+              break;
+            }
+            k--;
+          }
+          if (anchor) {
+            anchor.colSpan = (anchor.colSpan || 1) + 1;
+            td.dataset.hidden = "1";
+            td.style.display = "none";
+          }
+        }
+      }
+    });
+
+    // 二、再做向上合并（处理 "^"）
+    for (let r = 0; r < allRows.length; r++) {
+      const rowCells = Array.from(allRows[r].querySelectorAll("th,td"));
+      for (let i = 0; i < rowCells.length; i++) {
+        const td = rowCells[i];
+        if (td.dataset.hidden === "1") continue;
+        if (td.dataset.token !== "^") continue;
+
+        const col = Number(td.dataset.col);
+        // 向上寻找“覆盖该列(col)的可见锚点”
+        let anchor = null;
+        for (let rr = r - 1; rr >= 0 && !anchor; rr--) {
+          const aboveCells = Array.from(allRows[rr].querySelectorAll("th,td"));
+          for (let cc = 0; cc < aboveCells.length; cc++) {
+            const cand = aboveCells[cc];
+            if (cand.dataset.hidden === "1") continue;
+            if (cand.dataset.token === "<" || cand.dataset.token === "^") continue;
+
+            const start = Number(cand.dataset.col);
+            const span = cand.colSpan || 1;
+            if (col >= start && col < start + span) {
+              anchor = cand;
+              break;
+            }
+          }
+        }
+        if (anchor) {
+          anchor.rowSpan = (anchor.rowSpan || 1) + 1;
+          td.dataset.hidden = "1";
+          td.style.display = "none";
+        }
+      }
+    }
+  });
+})();
+</script>
