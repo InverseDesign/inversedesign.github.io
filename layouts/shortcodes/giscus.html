@@ -1,0 +1,79 @@
+{{/* Giscus 评论系统短代码 */}}
+{{ $repo       := .Get "repo"       | default "inversedesign/inversedesign.github.io" }}
+{{ $repoId     := .Get "repoId"     | default "R_kgDOPjsjDA" }}
+{{ $category   := .Get "category"   | default "Announcements" }}
+{{ $categoryId := .Get "categoryId" | default "DIC_kwDOPjsjDM4Cuj3Q" }}
+{{ $mapping    := .Get "mapping"    | default "pathname" }}
+{{ $reactions  := .Get "reactions"  | default "1" }}
+{{ $lang       := .Get "lang"       | default "zh-CN" }}
+
+<!-- Giscus 主脚本 -->
+<script src="https://giscus.app/client.js"
+        data-repo="{{ $repo }}"
+        data-repo-id="{{ $repoId }}"
+        data-category="{{ $category }}"
+        data-category-id="{{ $categoryId }}"
+        data-mapping="{{ $mapping }}"
+        data-reactions-enabled="{{ $reactions }}"
+        data-theme="preferred_color_scheme"
+        data-lang="{{ $lang }}"
+        crossorigin="anonymous"
+        async>
+</script>
+
+<!-- 主题同步脚本 -->
+<script>
+(function () {
+  // 根据当前站点主题返回 giscus 主题名
+  function currentTheme() {
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  }
+
+  // 通知 giscus 更新主题
+  function updateGiscusTheme() {
+    try {
+      const iframe = document.querySelector('iframe[src*="giscus.app"]');
+      if (iframe && iframe.contentWindow) {
+        const theme = currentTheme();
+        iframe.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: theme } } },
+          'https://giscus.app'
+        );
+        
+        // 调试信息（仅本地开发）
+        if (window.location.hostname === 'localhost') {
+          console.log('Giscus 主题更新:', theme);
+        }
+      }
+    } catch (error) {
+      console.warn('Giscus 主题更新失败:', error);
+    }
+  }
+
+  // 监听 <html> class 变化
+  const observer = new MutationObserver(updateGiscusTheme);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  // 首次渲染完成后补发一次
+  function initThemeSync() {
+    // 等待 Giscus iframe 加载完成
+    const iframe = document.querySelector('iframe[src*="giscus.app"]');
+    if (iframe) {
+      iframe.addEventListener('load', () => setTimeout(updateGiscusTheme, 200));
+    } else {
+      // 如果还没有 iframe，等待一下再试
+      setTimeout(initThemeSync, 100);
+    }
+  }
+  
+  // 页面加载完成后初始化
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initThemeSync);
+  } else {
+    initThemeSync();
+  }
+})();
+</script>

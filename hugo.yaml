@@ -152,9 +152,24 @@ params:
   # 评论系统配置
   comments:
     enable: true                # 启用评论系统
-    type: supabase              # 评论系统类型
+    type: giscus                # 评论系统类型 (giscus/supabase)
   
-  # Supabase配置
+  # Giscus 配置
+  giscus:
+    repo: "inversedesign/inversedesign.github.io"
+    repoId: "R_kgDOPjsjDA"
+    category: "Announcements"
+    categoryId: "DIC_kwDOPjsjDM4Cuj3Q"
+    mapping: "pathname"
+    strict: "0"
+    reactionsEnabled: "1"
+    emitMetadata: "0"
+    inputPosition: "top"
+    theme: "preferred_color_scheme"
+    lang: "zh-CN"
+    loading: "lazy"
+  
+  # Supabase配置 (备用评论系统)
   supabase:
     url: "https://dsrzlugtzanbzwzagakd.supabase.co"  # Supabase项目URL
     anonKey: "sb_publishable_vhPfTkE2AhtBbSqKo6goFQ_vK518sVh"  # 匿名密钥
