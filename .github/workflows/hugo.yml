@@ -1,50 +1,73 @@
-name: Deploy Hugo site to GitHub Pages
+name: 部署 Hugo 网站到 Pages
 
 on:
+  # 当推送到默认分支时触发
   push:
-    branches:
-      - main
+    branches: ["main"]
+
+  # 允许从 Actions 标签页手动运行此工作流
   workflow_dispatch:
 
+# 为 GITHUB_TOKEN 设置权限，以便部署到 GitHub Pages
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read      # 读取仓库内容
+  pages: write        # 写入 Pages
+  id-token: write     # 签发 OIDC 令牌
 
+# 同时只能有一个部署任务在运行，队列中的其他任务会被跳过。
+# 但不要取消正在运行的任务，以确保生产部署能够完成。
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
+# 默认使用 bash
 defaults:
   run:
     shell: bash
 
 jobs:
+  # 构建任务
   build:
     runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.148.2   # Hugo 最新版本
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4            # ✅ v4
+      - name: 检出代码
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
-          fetch-depth: 0
+          fetch-depth: 0        # 获取完整历史，以便使用 .GitInfo 和 .Lastmod
+          submodules: recursive # 递归拉取子模块
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3      # 这是 Hugo 安装 action，非 artifact，目前最新就是 v3，可放心使用
+      - name: 安装 Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5     # ✅ 官方最新
+      - name: 配置 Pages
+        id: pages
+        uses: actions/configure-pages@v5
 
-      - name: Build with Hugo
+      - name: 安装 Hugo
+        run: |
+          wget -O ${{ runner.temp }}/hugo.deb \
+            https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+
+      - name: 使用 Hugo 构建
         env:
-          HUGO_ENVIRONMENT: production
+          HUGO_ENVIRONMENT: production   # 向后兼容 Hugo 模块
           HUGO_ENV: production
         run: |
-          hugo --minify
+          hugo \
+            --gc --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3  # ✅ 官方已发布 v3（注意：upload-pages-artifact 最新就是 v3，与 upload-artifact 不同）
+      - name: 上传构建产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public   # Hugo 默认输出目录
 
+  # 部署任务
   deploy:
     environment:
       name: github-pages
@@ -52,6 +75,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: 部署到 GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4        # ✅ 官方最新
+        uses: actions/deploy-pages@v4
