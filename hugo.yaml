@@ -69,17 +69,17 @@ menu:
         type: search            # 特殊类型：搜索
     - name: "GitHub"            # GitHub链接
       weight: 5
-      url: "https://github.com/inversedesign"  # 外部链接
+      url: "https://github.com/InverseDesign"  # 外部链接
       params:
         icon: github            # 图标类型
   footer:                       # 页脚菜单
     - identifier: footertext
-      name: "Modern, fast, feature-rich personal website"  # 页脚描述文本
+      name: "Modern, fast, feature-rich personal website - Built with Markdown and Hugo"  # 页脚描述文本
 
 # 网站参数配置
 params:
-  description: "现代、快速、功能丰富的个人网站"  # 网站描述
-  author: "shazhongjin"         # 作者信息
+  description: "现代、快速、功能丰富的个人网站 - 使用 Markdown 和 Hugo 构建"  # 网站描述
+  author: "InverseDesign"       # 作者信息
   
   # 图片配置
   images:
@@ -98,7 +98,7 @@ params:
   
   # 页面配置
   page:
-    width: normal               # 页面宽度（full/wide/normal）
+    width: wide                 # 页面宽度（full/wide/normal）
   
   # 主题配置
   theme:
@@ -110,14 +110,14 @@ params:
     enable: true                # 启用页脚
     displayCopyright: true      # 显示版权信息
     displayPoweredBy: true      # 显示"Powered by Hugo"
-    width: normal               # 页脚宽度
-    copyright: '© {year} InverseDesign. 保留所有权利。'  # 版权文本
+    width: wide                 # 页脚宽度
+    copyright: '© {year} InverseDesign. All rights reserved.'  # 版权文本
     links:                      # 页脚链接
       - name: "GitHub"
-        url: "https://github.com/yourusername"
+        url: "https://github.com/InverseDesign"
         icon: "github"
       - name: "Twitter"
-        url: "https://twitter.com/yourusername"
+        url: "https://twitter.com/InverseDesign"
         icon: "twitter"
   
   # 显示配置
@@ -183,14 +183,14 @@ params:
   # 社交媒体链接
   social:
     - name: "GitHub"
-      url: "https://github.com/yourusername"
+      url: "https://github.com/InverseDesign"
       icon: "github"
     - name: "Twitter"
-      url: "https://twitter.com/yourusername"
+      url: "https://twitter.com/InverseDesign"
       icon: "twitter"
     - name: "LinkedIn"
-      url: "https://linkedin.com/in/yourusername"
+      url: "https://linkedin.com/in/InverseDesign"
       icon: "linkedin"
     - name: "Email"
-      url: "mailto:your.email@example.com"
+      url: "mailto:contact@inversedesign.com"
       icon: "mail"
