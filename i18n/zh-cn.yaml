@@ -1,6 +1,6 @@
 # 中文翻译文件
 title: "InverseDesign"
-description: "现代、快速、功能丰富的个人网站"
+site_description: "现代、快速、功能丰富的个人网站"
 
 # 菜单翻译 - Hugo标准格式
 menu.main.blog: "博客"

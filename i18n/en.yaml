@@ -1,6 +1,6 @@
 # English translation file
 title: "InverseDesign"
-description: "Modern, fast, feature-rich personal website"
+site_description: "Modern, fast, feature-rich personal website"  # 修改这里
 
 # Menu translations - Hugo standard format
 menu.main.blog: "Blog"
